@@ -1,5 +1,4 @@
 import { createTheme } from "@mui/material/styles";
-import { deepPurple } from "@mui/material/colors";
 
 const LightTheme = createTheme({
   typography: {

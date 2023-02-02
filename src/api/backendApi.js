@@ -62,20 +62,20 @@ const MOVIE_BASE_FIELDS = [
   "isUpcoming",
 ];
 
-const PERSON_BASE_FIELDS = [
-  "_id",
-  "avatarUrl",
-  "name",
-  "dob",
-  "pob",
-  "job",
-  "createdAt",
-];
+// const PERSON_BASE_FIELDS = [
+//   "_id",
+//   "avatarUrl",
+//   "name",
+//   "dob",
+//   "pob",
+//   "job",
+//   "createdAt",
+// ];
 
-const parseFieldsParam = (params) =>
-  params.fields
-    ? { ...params, fields: params.fields.join(",") }
-    : { ...params };
+// const parseFieldsParam = (params) =>
+//   params.fields
+//     ? { ...params, fields: params.fields.join(",") }
+//     : { ...params };
 
 const userApi = new UserApi();
 const movieApi = new MovieApi();

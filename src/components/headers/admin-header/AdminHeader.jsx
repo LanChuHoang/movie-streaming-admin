@@ -24,7 +24,7 @@ const AdminHeader = () => {
       setUser({ username, profileImage });
     };
     fetchUserDetail(auth?.id);
-  }, [auth]);
+  }, [auth, backendApi]);
 
   const handleLogout = async (e) => {
     e.preventDefault();
