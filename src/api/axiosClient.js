@@ -1,12 +1,14 @@
 import axios from "axios";
 
+const baseURL = process.env.REACT_APP_BACKEND_BASE_URL;
+
 const axiosClient = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL,
   timeout: 2500,
 });
 
 export const axiosPrivateClient = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL,
   timeout: 2500,
   withCredentials: true,
 });
