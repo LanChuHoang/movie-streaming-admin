@@ -8,14 +8,14 @@ const useRefreshToken = () => {
   const refresh = async () => {
     try {
       const { accessToken } = (await backendApi.refreshToken()).data;
-      const { id, isAdmin } = parseJwt(accessToken);
-      console.log("Prev access token ", auth?.accessToken);
-      console.log("New access token ", accessToken);
+      const { sub: id, isAdmin } = parseJwt(accessToken);
+      // console.log("Prev access token ", auth?.accessToken);
+      // console.log("New access token ", accessToken);
       setAuth({ id, isAdmin, accessToken });
       return accessToken;
     } catch (error) {
-      console.log("Refresh token failed ");
-      console.log(error.response?.data || error, error.response?.status);
+      // console.log("Refresh token failed ");
+      // console.log(error.response?.data || error, error.response?.status);
       setAuth({});
     }
   };

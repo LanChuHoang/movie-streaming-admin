@@ -1,13 +1,3 @@
-import "./upsertShow.scss";
-import { useParams } from "react-router-dom";
-import { useEffect, useState, useCallback } from "react";
-import tmdbApi from "../../../api/tmdb/tmdbApi";
-import useBackendApi from "../../../hooks/useBackendApi";
-import AdminImportBar from "../../../components/admin-import-bar/AdminImportBar";
-import { apiOptions } from "../../../api/filterOptions";
-import UpsertInput from "../../../components/inputs/upsert-input/UpsertInput";
-import AdminPersonGrid from "../../../components/admin-person-grid/AdminPersonGrid";
-import { toShowModel } from "../../../api/tmdb/tmdbApi.helper";
 import {
   Alert,
   Backdrop,
@@ -15,7 +5,17 @@ import {
   CircularProgress,
   Snackbar,
 } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { apiOptions } from "../../../api/filterOptions";
+import tmdbApi from "../../../api/tmdb/tmdbApi";
+import { toShowModel } from "../../../api/tmdb/tmdbApi.helper";
+import AdminImportBar from "../../../components/admin-import-bar/AdminImportBar";
+import AdminPersonGrid from "../../../components/admin-person-grid/AdminPersonGrid";
 import AdminSeasonGrid from "../../../components/admin-season-grid/AdminSeasonGrid";
+import UpsertInput from "../../../components/inputs/upsert-input/UpsertInput";
+import useBackendApi from "../../../hooks/useBackendApi";
+import "./upsertShow.scss";
 
 const UpsertShow = () => {
   const { id } = useParams();
@@ -86,7 +86,10 @@ const UpsertShow = () => {
   const handleDirectorIdsChange = useCallback(
     (newIds) => {
       console.log("directors changed", newIds);
-      mergeShowState("directors", newIds);
+      mergeShowState(
+        "directors",
+        newIds.map((i) => i._id)
+      );
     },
     [mergeShowState]
   );

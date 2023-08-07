@@ -10,9 +10,9 @@ const endpoint = {
   login: "/auth/login",
   refreshToken: "/auth/refresh_token",
   logout: "/auth/logout",
-  getUsers: "/user",
-  searchUsers: "/user/search",
-  randomMovie: "/movie/random",
+  getUsers: "/users",
+  searchUsers: "/users/search",
+  randomMovie: "/movies/random",
   userOverallStats: "/statistic/user/overall",
   userDetailStats: "/statistic/user/detail",
 

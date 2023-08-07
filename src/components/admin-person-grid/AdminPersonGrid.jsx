@@ -1,15 +1,15 @@
-import "./adminPersonGrid.scss";
-import CrudDataGrid from "../tables/crud-data-grid/CrudDataGrid";
-import React, { useEffect, useState, useCallback } from "react";
-import useBackendApi from "../../hooks/useBackendApi";
-import tmdbApi from "../../api/tmdb/tmdbApi";
-import { isDirector, toPersonModel } from "../../api/tmdb/tmdbApi.helper";
-import { GENDERS, JOBS } from "../../api/filterOptions";
-import AdminPersonGridToolbar from "./AdminPersonGridToolbar";
 import { Chip } from "@mui/material";
 import { capitalize } from "lodash";
+import React, { useCallback, useEffect, useState } from "react";
+import { GENDERS, JOBS } from "../../api/filterOptions";
 import { toBritishDate } from "../../api/helper";
+import tmdbApi from "../../api/tmdb/tmdbApi";
+import { isDirector, toPersonModel } from "../../api/tmdb/tmdbApi.helper";
+import useBackendApi from "../../hooks/useBackendApi";
 import ProfileCell from "../table-cells/profile-cell/ProfileCell";
+import CrudDataGrid from "../tables/crud-data-grid/CrudDataGrid";
+import AdminPersonGridToolbar from "./AdminPersonGridToolbar";
+import "./adminPersonGrid.scss";
 
 const rowStatus = {
   new: "New",
@@ -42,7 +42,7 @@ const AdminPersonGrid = ({
     if (!rows) return;
     const storedIds = rows
       .filter((r) => r.status === rowStatus.stored)
-      .map((r) => r._id);
+      .map((r) => ({ _id: r._id, character: r.character }));
     onPersonIdsChange(storedIds);
   }, [rows, onPersonIdsChange]);
 
@@ -79,10 +79,18 @@ const AdminPersonGrid = ({
                 limit: 1,
               });
               const storedPerson = results.docs.find((d) => d.name === p.name);
-              if (storedPerson) resolve(toStoredRow(storedPerson));
+              if (storedPerson)
+                resolve(
+                  toStoredRow({ ...storedPerson, character: p.character })
+                );
               const notStoredPerson = (await tmdbApi.person.getPerson(p.id))
                 .data;
-              resolve(toNewRow(toPersonModel(notStoredPerson)));
+              resolve(
+                toNewRow({
+                  ...toPersonModel(notStoredPerson),
+                  character: p.character,
+                })
+              );
             } catch (error) {
               reject(error);
             }
@@ -130,17 +138,20 @@ const AdminPersonGrid = ({
     const toAddPeople = rows.filter((r) => r.status === rowStatus.new);
     const toUpdatePeople = rows.filter((r) => r.status === rowStatus.edited);
     const responses = await Promise.all([
-      ...toAddPeople.map(({ _id, status, ...data }) =>
-        backendApi.person.addItem(data)
+      ...toAddPeople.map(
+        ({ _id, status, __v, createdAt, updatedAt, character, ...data }) =>
+          backendApi.person.addItem(data)
       ),
-      ...toUpdatePeople.map(({ _id, status, ...data }) =>
-        backendApi.person.updateItem(_id, data)
+      ...toUpdatePeople.map(
+        ({ _id, status, __v, createdAt, updatedAt, character, ...data }) =>
+          backendApi.person.updateItem(_id, data)
       ),
     ]);
     const updatedPeople = responses.map((r) => r.data);
-    const newRows = rows.map((r) =>
-      toStoredRow(updatedPeople.find((p) => p.name === r.name) || r)
-    );
+    const newRows = rows.map((r) => {
+      const updated = updatedPeople.find((p) => p.name === r.name);
+      return updated ? { ...toStoredRow(updated), character: r.character } : r;
+    });
     console.log("updated", newRows);
     setRows(newRows);
     setIsLoading(false);
@@ -220,6 +231,12 @@ const columns = [
           return <Chip size="small" label="Unknown" />;
       }
     },
+  },
+  {
+    field: "character",
+    headerName: "Character",
+    width: 70,
+    editable: true,
   },
   {
     field: "gender",

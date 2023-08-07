@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useLogout from "../../../hooks/useLogout";
 import useAuth from "../../../hooks/useAuth";
 import useBackendApi from "../../../hooks/useBackendApi";
+import useLogout from "../../../hooks/useLogout";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AdminLogo from "../../admin-logo/AdminLogo";
 import CircularAvatar from "../../circular-avatar/CircularAvatar";
 import "./adminHeader.scss";
-import AdminLogo from "../../admin-logo/AdminLogo";
 
 const AdminHeader = () => {
   const [user, setUser] = useState();
@@ -19,7 +19,7 @@ const AdminHeader = () => {
 
   useEffect(() => {
     const fetchUserDetail = async (id) => {
-      const { username, profileImage } = (await backendApi.getUserDetail(id))
+      const { username, profileImage } = (await backendApi.user.getUser(id))
         .data;
       setUser({ username, profileImage });
     };

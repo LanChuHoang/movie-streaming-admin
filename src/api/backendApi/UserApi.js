@@ -2,8 +2,8 @@ import BaseApi from "./BaseApi";
 import { parseJwt, toShortISOString } from "../helper";
 
 const endpoint = {
-  base: "/user",
-  search: "/user/search",
+  base: "/users",
+  search: "/users/search",
   register: "/auth/register",
   login: "/auth/login",
   refreshToken: "/auth/refresh_token",

@@ -1,13 +1,3 @@
-import "./upsertMovie.scss";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import tmdbApi from "../../../api/tmdb/tmdbApi";
-import useBackendApi from "../../../hooks/useBackendApi";
-import AdminImportBar from "../../../components/admin-import-bar/AdminImportBar";
-import { apiOptions } from "../../../api/filterOptions";
-import UpsertInput from "../../../components/inputs/upsert-input/UpsertInput";
-import AdminPersonGrid from "../../../components/admin-person-grid/AdminPersonGrid";
-import { toMovieModel } from "../../../api/tmdb/tmdbApi.helper";
 import {
   Alert,
   Backdrop,
@@ -15,7 +5,16 @@ import {
   CircularProgress,
   Snackbar,
 } from "@mui/material";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { apiOptions } from "../../../api/filterOptions";
+import tmdbApi from "../../../api/tmdb/tmdbApi";
+import { toMovieModel } from "../../../api/tmdb/tmdbApi.helper";
+import AdminImportBar from "../../../components/admin-import-bar/AdminImportBar";
+import AdminPersonGrid from "../../../components/admin-person-grid/AdminPersonGrid";
+import UpsertInput from "../../../components/inputs/upsert-input/UpsertInput";
+import useBackendApi from "../../../hooks/useBackendApi";
+import "./upsertMovie.scss";
 
 const UpsertMovie = () => {
   const { id } = useParams();
@@ -81,7 +80,10 @@ const UpsertMovie = () => {
   const handleDirectorIdsChange = useCallback(
     (newIds) => {
       console.log("directors changed", newIds);
-      mergeMovieState("directors", newIds);
+      mergeMovieState(
+        "directors",
+        newIds.map((i) => i._id)
+      );
     },
     [mergeMovieState]
   );

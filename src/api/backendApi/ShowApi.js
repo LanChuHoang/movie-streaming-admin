@@ -1,8 +1,8 @@
 import MediaApi from "./MediaApi";
 
 const endpoint = {
-  base: "/show",
-  search: "/show/search",
+  base: "/shows",
+  search: "/shows/search",
 };
 
 class ShowApi extends MediaApi {
